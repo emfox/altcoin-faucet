@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Faucet Admin</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="/"><span id="brand-coin">Altcoin</span> <span>Faucet</span></a>
+      <div class="nodeinfo"><span>Admin</span></div>
+    </div>
+  </header>
+
+  <!-- login -->
+  <div id="login-view" class="loginbox hidden">
+    <div class="card">
+      <h1 style="font-size:20px">Administrator sign in</h1>
+      <p class="lede">Credentials are set via environment variables.</p>
+      <form id="login-form" novalidate>
+        <div class="field"><label for="user">Username</label><input type="text" id="user" autocomplete="username" required></div>
+        <div class="field"><label for="pass">Password</label><input type="password" id="pass" autocomplete="current-password" required></div>
+        <button type="submit">Sign in</button>
+        <div id="login-feedback" class="alert hidden"></div>
+      </form>
+    </div>
+  </div>
+
+  <!-- panel -->
+  <div id="panel-view" class="container hidden">
+    <div class="card" style="margin-bottom:18px">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+        <h2 style="margin:0" id="panel-title">Admin panel</h2>
+        <button id="logout-btn" class="secondary small">Sign out</button>
+      </div>
+    </div>
+
+    <div id="admin-alert" class="alert hidden"></div>
+
+    <section class="block">
+      <div class="grid2">
+        <div class="card">
+          <h2>Summary</h2>
+          <ul class="statlist" id="summary-list"></ul>
+        </div>
+        <div class="card">
+          <h2>Controls</h2>
+          <div class="field">
+            <label for="sp-value">Single payout (coins) — applies to the current round</label>
+            <div class="controls">
+              <input type="number" id="sp-value" step="any" min="0">
+              <button id="sp-btn" class="small">Set singlepay</button>
+            </div>
+          </div>
+          <div class="field">
+            <label for="rn-value">Round number (display only)</label>
+            <div class="controls">
+              <input type="number" id="rn-value" step="1" min="1">
+              <button id="rn-btn" class="small">Set round #</button>
+            </div>
+          </div>
+          <div class="controls" style="margin-top:6px">
+            <button id="clear-btn" class="danger small">Delete all claims of current round</button>
+            <button id="settle-btn" class="small">Try settle round now</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="block">
+      <div class="card">
+        <h2>Claims in the current round</h2>
+        <div class="tablewrap">
+          <table class="tbl" id="claims-table">
+            <thead><tr><th>#</th><th>Address</th><th>IP</th><th>Claimed at (UTC)</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="block">
+      <div class="card">
+        <h2>Settled rounds</h2>
+        <div class="tablewrap">
+          <table class="tbl" id="settled-table">
+            <thead><tr><th>Round</th><th class="num">Amount</th><th class="num">Payees</th><th>Transaction</th><th>Settled (UTC)</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section class="block">
+      <div class="card">
+        <h2>Recent wallet transactions</h2>
+        <div class="tablewrap">
+          <table class="tbl" id="tx-table">
+            <thead><tr><th>Confirmations</th><th>Category</th><th class="num">Amount</th><th>Address</th><th>Transaction</th></tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script src="/admin.js" defer></script>
+</body>
+</html>

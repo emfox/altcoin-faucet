@@ -1,0 +1,53 @@
+# Altcoin Faucet — local/dev compose stack.
+#
+# First run:
+#   cp .env.example .env          # fill in real values (coin daemon, recaptcha, admin …)
+#   docker compose up -d --build
+# The MySQL image auto-runs migrations/init/* on first boot (creates the app
+# user and seeds round #1), so no extra migration step is needed in Docker.
+#
+# For production behind an nginx-proxy reverse proxy add the override file:
+#   docker compose -f compose.yml -f compose.prod.yml up -d --build
+
+services:
+  faucet:
+    build: .
+    image: altcoin-faucet:local
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      DB_HOST: faucet-mysql
+      VIRTUAL_HOST: ${VIRTUAL_HOST:?set VIRTUAL_HOST in .env}
+      LETSENCRYPT_HOST: ${VIRTUAL_HOST}
+      LETSENCRYPT_EMAIL: ${LETSENCRYPT_EMAIL:-emfoxzhou@gmail.com}
+    depends_on:
+      faucet-mysql:
+        condition: service_healthy
+    networks:
+      - nginx-proxy
+      - default
+
+  faucet-mysql:
+    image: mysql:8.4
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_DATABASE: faucet
+      # Used by migrations/init/01-user.sh to provision the app account.
+      MYSQL_FAUCET_USER: ${DB_USER:-faucet}
+      MYSQL_FAUCET_PASSWORD: ${DB_PASSWORD}
+      INITIAL_SINGLEPAY: ${INITIAL_SINGLEPAY:-2000}
+    volumes:
+      - ./mysql-data:/var/lib/mysql
+      # MySQL only runs /docker-entrypoint-initdb.d on a FRESH data dir.
+      # Order matters (alphabetical): 00-schema.sql -> 01-user.sh -> 02-seed.sh.
+      - ./migrations/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -p\"$${MYSQL_ROOT_PASSWORD}\""]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 40s
+    networks:
+      - default
+

@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Altcoin Faucet</title>
+  <meta name="description" content="Free coins from the community faucet. Claim once per round.">
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="topbar-inner">
+      <a class="brand" href="/"><span id="brand-coin">Altcoin</span> Faucet</a>
+      <div class="nodeinfo">
+        <span>Block <b id="ni-blocks">&ndash;</b></span>
+        <span>Difficulty <b id="ni-diff">&ndash;</b></span>
+        <span>Peers <b id="ni-peers">&ndash;</b></span>
+      </div>
+    </div>
+  </header>
+
+  <div class="container">
+    <div class="layout">
+      <main>
+        <h1 id="h1-coin">Altcoin Faucet</h1>
+        <p class="lede" id="lede-text">Free coins for the community. Donations keep this faucet running.</p>
+        <ul class="rules">
+          <li>Payouts are sent in batches when a round fills up with <b id="rule-size">30</b> unique claims.</li>
+          <li>You can claim <b>once per round</b> from the same IP, and each address once per round.</li>
+          <li>If the donation wallet lacks funds when a round fills, the round stays open until enough arrives.</li>
+        </ul>
+
+        <div class="card">
+          <form id="claim-form" novalidate>
+            <div class="field">
+              <label for="addr" id="addr-label">Your coin address</label>
+              <input type="text" id="addr" name="address" autocomplete="off" spellcheck="false"
+                     placeholder="paste your receiving address here" required>
+              <p class="hint" id="addr-hint">A valid address for this coin.</p>
+            </div>
+            <input type="hidden" id="recaptcha-token" name="recaptchaToken">
+            <button type="submit" id="submit-btn">Claim coins</button>
+            <div id="feedback" class="alert hidden" role="status"></div>
+          </form>
+        </div>
+      </main>
+
+      <aside class="sidebar">
+        <div class="card">
+          <h2>Faucet statistics</h2>
+          <ul class="statlist">
+            <li><span class="k">Current round</span><span class="v" id="st-round">–</span></li>
+            <li><span class="k">Submitted this round</span><span class="v" id="st-submitted">–</span></li>
+            <li><span class="k">Payout per claim</span><span class="v" id="st-singlepay">–</span></li>
+            <li><span class="k">Total paid out</span><span class="v" id="st-totalpay">–</span></li>
+            <li><span class="k">Total submissions</span><span class="v" id="st-total">–</span></li>
+          </ul>
+        </div>
+        <div class="card">
+          <h2>Donations</h2>
+          <ul class="statlist">
+            <li><span class="k">Balance</span><span class="v" id="st-balance">–</span></li>
+          </ul>
+          <p class="address muted">Send coins to<br><span id="st-donaddr" class="mono"></span></p>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <footer class="footer">
+    <p id="footer-note">Donations power the payouts. No fees, no registration &mdash; just coins.</p>
+  </footer>
+
+  <script src="/app.js" defer></script>
+</body>
+</html>
