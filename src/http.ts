@@ -144,7 +144,7 @@ function registerPublicRoutes(app: FastifyInstance, ctx: AppContext): void {
           required: ['address', 'recaptchaToken'],
           properties: {
             address: { type: 'string', pattern: '^[A-Za-z0-9]{20,90}$' },
-            recaptchaToken: { type: 'string', minLength: 20, maxLength: 2048 },
+            recaptchaToken: { type: 'string', minLength: 20, maxLength: 16384 },
           },
         },
       },
